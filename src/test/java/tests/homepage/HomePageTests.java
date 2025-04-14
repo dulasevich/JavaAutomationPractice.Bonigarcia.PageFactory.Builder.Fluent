@@ -1,15 +1,18 @@
+package tests.homepage;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import tests.BaseTest;
 
 import java.util.List;
 
 import static constants.LinksConstants.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class HomePageTests extends BaseTest{
+public class HomePageTests extends BaseTest {
 
     @Test
     void contentTest() {
@@ -43,7 +46,7 @@ public class HomePageTests extends BaseTest{
     void linksTest(String linkName, String endpoint, String title) {
         homePage.clickSpecificLink(linkName);
 
-        Assertions.assertEquals(BASE_URL + endpoint, homePage.getPageUrl(), "Incorrect page opens");
+        Assertions.assertEquals(BaseTest.BASE_URL + endpoint, homePage.getPageUrl(), "Incorrect page opens");
         Assertions.assertEquals(title, homePage.getTitle(), "Incorrect title");
     }
 }

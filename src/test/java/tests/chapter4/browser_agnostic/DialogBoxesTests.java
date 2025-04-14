@@ -1,11 +1,14 @@
+package tests.chapter4.browser_agnostic;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pages.DialogBoxesPage;
+import tests.BaseTest;
 
 import java.util.List;
 
-public class DialogBoxesTest extends BaseTest {
+public class DialogBoxesTests extends BaseTest {
     private DialogBoxesPage dialogBoxesPage;
 
     @BeforeEach

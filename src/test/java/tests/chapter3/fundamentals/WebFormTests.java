@@ -1,3 +1,5 @@
+package tests.chapter3.fundamentals;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -5,6 +7,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import pages.SubmitFormPage;
 import pages.WebFormPage;
+import tests.BaseTest;
 
 import java.io.File;
 import java.net.URL;
@@ -14,7 +17,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class WebFormTests extends BaseTest{
+public class WebFormTests extends BaseTest {
     private static final String TEXT_TO_ENTER = "text";
     private static final String TEXT_AREA_TO_ENTER = "This is line one.\nThis is line two.\nAnd this is line three.";
     private WebFormPage webFormPage;
