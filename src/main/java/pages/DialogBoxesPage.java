@@ -1,25 +1,45 @@
 package pages;
 
 import io.qameta.allure.Step;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DialogBoxesPage extends BasePage{
-    private static final By DIALOG_BOXES_BUTTONS = By.xpath("//div[@class='col-sm-2 py-2']/button");
-    private static final By MODAL_TITLE = By.xpath("//h5[@class='modal-title']");
-    private static final By MODAL_BODY = By.xpath("//div[@class='modal-body']");
-    private static final By MODAL_CLOSE_BUTTON =By.xpath("//button[contains(@class, 'secondary')]");
-    private static final By MODAL_SAVE_BUTTON = By.xpath("//button[contains(@class, 'btn-primary')]");
-    private static final String DIALOG_BOX_XPATH = "//button[@id='my-%s']";
-    private static final String ALERT_RESULTS_XPATH = DIALOG_BOX_XPATH + "/following-sibling::p";
-    private static final String ALERT_TYPE_CONFIRM= "confirm";
-    private static final String ALERT_TYPE_PROMPT= "prompt";
-    private static final String MODAL_TYPE_PROMPT= "modal";
+public class DialogBoxesPage extends BasePage {
+    @FindBy(xpath = "//div[@class='col-sm-2 py-2']/button")
+    private List<WebElement> dialogBoxesButtons;
+
+    @FindBy(xpath = "//h5[@class='modal-title']")
+    private WebElement modalTitle;
+
+    @FindBy(xpath = "//div[@class='modal-body']")
+    private WebElement modalBody;
+
+    @FindBy(xpath = "//button[contains(@class, 'secondary')]")
+    private WebElement modalCloseButton;
+
+    @FindBy(xpath = "//button[contains(@class, 'btn-primary')]")
+    private WebElement modalSaveButton;
+
+    @FindBy(xpath = "//button[@id='my-alert']")
+    private WebElement launchAlertButton;
+
+    @FindBy(xpath = "//button[@id='my-confirm']")
+    private WebElement launchConfirmButton;
+
+    @FindBy(xpath = "//button[@id='my-prompt']")
+    private WebElement launchPromptButton;
+
+    @FindBy(xpath = "//button[@id='my-modal']")
+    private WebElement launchModalButton;
+
+    private static final String ALERT_RESULTS_XPATH = "./following-sibling::p";
 
     public DialogBoxesPage(WebDriver driver) {
         super(driver);
@@ -27,81 +47,101 @@ public class DialogBoxesPage extends BasePage{
 
     @Step("Get all alerts buttons")
     public List<String> getAllDialogBoxesButton() {
-        return driver.findElements(DIALOG_BOXES_BUTTONS).stream().map(WebElement::getText).collect(Collectors.toList());
+        return dialogBoxesButtons.stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
     @Step("Launch alert")
-    public void clickLaunchAlert() {
-        driver.findElement(By.xpath(String.format(DIALOG_BOX_XPATH, "alert"))).click();
+    public DialogBoxesPage clickLaunchAlert() {
+        launchAlertButton.click();
+        return this;
     }
 
     @Step("Get alert text")
-    public String getAlertText() {
-        return pageUtil.getAlert().getText();
+    public DialogBoxesPage checkAlertText(String text) {
+        Assertions.assertEquals(text, getAlert().getText(), "Incorrect alert text");
+        return this;
     }
 
     @Step("Launch confirm alert")
-    public void clickLaunchConfirmAlert() {
-        driver.findElement(By.xpath(String.format(DIALOG_BOX_XPATH, ALERT_TYPE_CONFIRM))).click();
+    public DialogBoxesPage clickLaunchConfirmAlert() {
+        launchConfirmButton.click();
+        return this;
     }
 
     @Step("Launch prompt alert")
-    public void clickLaunchPromptAlert() {
-        driver.findElement(By.xpath(String.format(DIALOG_BOX_XPATH, ALERT_TYPE_PROMPT))).click();
+    public DialogBoxesPage clickLaunchPromptAlert() {
+        launchPromptButton.click();
+        return this;
     }
 
     @Step("Accept alert")
-    public void acceptAlert() {
-        pageUtil.getAlert().accept();
+    public DialogBoxesPage acceptAlert() {
+        getAlert().accept();
+        return this;
     }
 
     @Step("Enter text to alert")
-    public void sendKeysToAlert(String text) {
-        pageUtil.getAlert().sendKeys(text);
+    public DialogBoxesPage sendKeysToAlert(String text) {
+        getAlert().sendKeys(text);
+        return this;
     }
 
-    @Step("Dismiss alert")
-    public void dismissAlert() {
-        pageUtil.getAlert().dismiss();
+    @Step("Skip alert")
+    public DialogBoxesPage dismissAlert() {
+        getAlert().dismiss();
+        return this;
     }
 
-    @Step("Get confirm alert message")
-    public String getAlertConfirmMessage() {
-        return driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, ALERT_TYPE_CONFIRM))).getText();
+    @Step("Verify confirm alert message")
+    public DialogBoxesPage checkAlertConfirmMessage(String message) {
+        Assertions.assertEquals(message, launchConfirmButton.findElement(By.xpath(ALERT_RESULTS_XPATH)).getText(),
+                "Alert confirm message is wrong");
+        return this;
     }
 
-    @Step("Get prompt alert message")
-    public String getAlertPromptMessage() {
-        return driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, ALERT_TYPE_PROMPT))).getText();
+    @Step("Verify prompt alert message")
+    public DialogBoxesPage checkAlertPromptMessage(String message) {
+        Assertions.assertEquals(message, launchPromptButton.findElement(By.xpath(ALERT_RESULTS_XPATH)).getText(),
+                "Alert prompt message is wrong");
+        return this;
     }
 
     @Step("Launch modal")
-    public void clickModalAlert() {
-        driver.findElement(By.xpath(String.format(DIALOG_BOX_XPATH, MODAL_TYPE_PROMPT))).click();
+    public DialogBoxesPage clickModalAlert() {
+        launchModalButton.click();
+        return this;
     }
 
-    @Step("Get modal message")
-    public String getModalMessage() {
-        return driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, MODAL_TYPE_PROMPT))).getText();
+    @Step("Verify modal message")
+    public DialogBoxesPage checkModalMessage(String message) {
+        Assertions.assertEquals(message, launchModalButton.findElement(By.xpath(ALERT_RESULTS_XPATH)).getText(),
+                "Modal selection was wrong");
+        return this;
     }
 
-    @Step("Get modal title")
-    public String getModalTitle() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(MODAL_TITLE)).getText();
+    @Step("Verify modal title")
+    public DialogBoxesPage checkModalTitle(String modalTitleText) {
+        Assertions.assertEquals(modalTitleText, wait.until(ExpectedConditions.visibilityOf(modalTitle)).getText(),
+                "Incorrect modal title");
+        return this;
     }
 
-    @Step("Get modal body")
-    public String getModalBody() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(MODAL_BODY)).getText();
+    @Step("Verify modal body")
+    public DialogBoxesPage checkModalBody(String modalBodyText) {
+        Assertions.assertEquals(modalBodyText, wait.until(ExpectedConditions.visibilityOf(modalBody)).getText(),
+                "Incorrect modal body");
+        return this;
     }
 
     @Step("Close modal")
-    public void closeModal() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MODAL_CLOSE_BUTTON)).click();
+    public DialogBoxesPage closeModal() {
+        wait.until(ExpectedConditions.visibilityOf(modalCloseButton)).click();
+        return this;
     }
 
     @Step("Save modal")
-    public void saveModal() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(MODAL_SAVE_BUTTON)).click();
+    public DialogBoxesPage saveModal() {
+        wait.until(ExpectedConditions.visibilityOf(modalSaveButton)).click();
+        return this;
     }
 }

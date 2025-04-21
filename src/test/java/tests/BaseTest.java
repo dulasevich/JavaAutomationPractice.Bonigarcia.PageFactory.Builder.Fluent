@@ -1,25 +1,24 @@
 package tests;
 
+import browser.BrowserFactory;
+import configs.TestPropertiesConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import pages.HomePage;
 
 public class BaseTest {
     protected static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java/";
     protected WebDriver driver;
     protected HomePage homePage;
+    TestPropertiesConfig configProperties = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
 
     @BeforeEach
-    void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        driver = new ChromeDriver(options);
+    public void setUp() {
+        driver = BrowserFactory.getDriver(configProperties.getBrowser());
         homePage = new HomePage(driver);
-        driver.manage().window().maximize();
-        driver.get(BASE_URL);
+        homePage.open(BASE_URL);
     }
 
     @AfterEach

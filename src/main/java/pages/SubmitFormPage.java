@@ -1,11 +1,13 @@
 package pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class SubmitFormPage extends BasePage {
-    private static final By SUCCESS_SUBMIT_MESSAGE = By.xpath("//p");
+    @FindBy(xpath = "//p")
+    private WebElement successSubmitMessage;
 
     public SubmitFormPage(WebDriver driver) {
         super(driver);
@@ -13,6 +15,6 @@ public class SubmitFormPage extends BasePage {
 
     @Step("Get submit confirmation message")
     public String getConfirmationMessage() {
-        return driver.findElement(SUCCESS_SUBMIT_MESSAGE).getText();
+        return successSubmitMessage.getText();
     }
 }

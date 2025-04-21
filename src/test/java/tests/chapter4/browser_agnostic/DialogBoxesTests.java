@@ -11,8 +11,10 @@ import java.util.List;
 public class DialogBoxesTests extends BaseTest {
     private DialogBoxesPage dialogBoxesPage;
 
+    @Override
     @BeforeEach
-    void navigateToDialogBoxesPage() {
+    public void setUp() {
+        super.setUp();
         dialogBoxesPage = homePage.clickDialogBoxesLink();
     }
 
@@ -24,76 +26,51 @@ public class DialogBoxesTests extends BaseTest {
 
     @Test
     void launchAlertTest() {
-        dialogBoxesPage.clickLaunchAlert();
-        Assertions.assertEquals("Hello world!", dialogBoxesPage.getAlertText(), "Incorrect alert text");
+        dialogBoxesPage
+                .clickLaunchAlert()
+                .checkAlertText("Hello world!");
     }
 
     @Test
-    void launchConfirmAcceptTest() {
-        dialogBoxesPage.clickLaunchConfirmAlert();
-        Assertions.assertEquals("Is this correct?", dialogBoxesPage.getAlertText(), "Incorrect alert text");
-
-        dialogBoxesPage.acceptAlert();
-        Assertions.assertEquals("You chose: true", dialogBoxesPage.getAlertConfirmMessage(), "Alert was not accepted");
+    void launchConfirmTest() {
+        dialogBoxesPage
+                .clickLaunchConfirmAlert()
+                .checkAlertText("Is this correct?")
+                .acceptAlert()
+                .checkAlertConfirmMessage("You chose: true")
+                .clickLaunchConfirmAlert()
+                .dismissAlert()
+                .checkAlertConfirmMessage("You chose: false");
     }
 
     @Test
-    void launchConfirmDismissTest() {
-        dialogBoxesPage.clickLaunchConfirmAlert();
-        dialogBoxesPage.dismissAlert();
-        Assertions.assertEquals("You chose: false", dialogBoxesPage.getAlertConfirmMessage(), "Alert was not dismissed");
+    void launchPromptTest() {
+        String nameToEnter = "name";
+
+        dialogBoxesPage
+                .clickLaunchPromptAlert()
+                .checkAlertText("Please enter your name")
+                .acceptAlert()
+                .checkAlertPromptMessage("You typed:")
+                .clickLaunchPromptAlert()
+                .dismissAlert()
+                .checkAlertPromptMessage("You typed: null")
+                .clickLaunchPromptAlert()
+                .sendKeysToAlert(nameToEnter)
+                .acceptAlert()
+                .checkAlertPromptMessage("You typed: " + nameToEnter);
     }
 
     @Test
-    void launchPromptAcceptTest() {
-        dialogBoxesPage.clickLaunchPromptAlert();
-        Assertions.assertEquals("Please enter your name", dialogBoxesPage.getAlertText(), "Incorrect alert text");
-
-        dialogBoxesPage.acceptAlert();
-        Assertions.assertEquals("You typed:", dialogBoxesPage.getAlertPromptMessage(), "Alert was not accepted");
-    }
-
-    @Test
-    void launchPromptTextTest() {
-        String nameToEnter = "NAME";
-
-        dialogBoxesPage.clickLaunchPromptAlert();
-        dialogBoxesPage.sendKeysToAlert(nameToEnter);
-        dialogBoxesPage.acceptAlert();
-
-        Assertions.assertEquals("You typed: " + nameToEnter, dialogBoxesPage.getAlertPromptMessage(), "Text from alert is wrong");
-    }
-
-    @Test
-    void launchPromptDismissTest() {
-        dialogBoxesPage.clickLaunchPromptAlert();
-        dialogBoxesPage.dismissAlert();
-
-        Assertions.assertEquals("You typed: null", dialogBoxesPage.getAlertPromptMessage(), "Alert was not dismissed");
-    }
-
-    @Test
-    void launchModalViewTest() {
-        dialogBoxesPage.clickModalAlert();
-        Assertions.assertAll(
-                () -> Assertions.assertEquals("Modal title", dialogBoxesPage.getModalTitle(),
-                        "Incorrect modal title"),
-                () -> Assertions.assertEquals("This is the modal body", dialogBoxesPage.getModalBody(),
-                        "Incorrect modal body")
-        );
-    }
-
-    @Test
-    void launchModalCloseTest() {
-        dialogBoxesPage.clickModalAlert();
-        dialogBoxesPage.closeModal();
-        Assertions.assertEquals("You chose: Close", dialogBoxesPage.getModalMessage(), "Modal selection was wrong");
-    }
-
-    @Test
-    void launchModalSaveTest() {
-        dialogBoxesPage.clickModalAlert();
-        dialogBoxesPage.saveModal();
-        Assertions.assertEquals("You chose: Save changes", dialogBoxesPage.getModalMessage(), "Modal selection is wrong");
+    void launchModalTest() {
+        dialogBoxesPage
+                .clickModalAlert()
+                .checkModalTitle("Modal title")
+                .checkModalBody("This is the modal body")
+                .saveModal()
+                .checkModalMessage("You chose: Save changes")
+                .clickModalAlert()
+                .closeModal()
+                .checkModalMessage("You chose: Close");
     }
 }

@@ -117,36 +117,30 @@ public class WebFormTests extends BaseTest {
 
     @Test
     void checkBoxTest() {
-        String checkedCheckBox = "Checked checkbox";
-        String defaultCheckBox = "Default checkbox";
-
         Assertions.assertAll(
-                () -> Assertions.assertTrue(webFormPage.isCheckBoxSelected(checkedCheckBox), "Checked option is not selected"),
-                () -> Assertions.assertFalse(webFormPage.isCheckBoxSelected(defaultCheckBox), "Default option is selected")
+                () -> Assertions.assertTrue(webFormPage.isCheckedCheckBoxSelected(), "Checked option is not selected"),
+                () -> Assertions.assertFalse(webFormPage.isDefaultCheckBoxSelected(), "Default option is selected")
         );
 
-        webFormPage.selectCheckBox(checkedCheckBox);
-        webFormPage.selectCheckBox(defaultCheckBox);
+        webFormPage.selectCheckedCheckBox();
+        webFormPage.selectDefaultCheckBox();
         Assertions.assertAll(
-                () -> Assertions.assertFalse(webFormPage.isCheckBoxSelected(checkedCheckBox), "Checked option is still selected"),
-                () -> Assertions.assertTrue(webFormPage.isCheckBoxSelected(defaultCheckBox), "Default option is NOT selected")
+                () -> Assertions.assertFalse(webFormPage.isCheckedCheckBoxSelected(), "Checked option is still selected"),
+                () -> Assertions.assertTrue(webFormPage.isDefaultCheckBoxSelected(), "Default option is NOT selected")
         );
     }
 
     @Test
     void radioButtonTest() {
-        String checkedRadioButton = "Checked radio";
-        String defaultRadioButton = "Default radio";
-
         Assertions.assertAll(
-                () -> Assertions.assertTrue(webFormPage.isRadioButtonSelected(checkedRadioButton), "Checked button is not selected"),
-                () -> Assertions.assertFalse(webFormPage.isRadioButtonSelected(defaultRadioButton), "Default button is not selected")
+                () -> Assertions.assertTrue(webFormPage.isCheckedRadioButtonSelected(), "Checked button is not selected"),
+                () -> Assertions.assertFalse(webFormPage.isDefaultRadioButtonSelected(), "Default button is not selected")
         );
 
-        webFormPage.selectRadioButton(defaultRadioButton);
+        webFormPage.selectDefaultRadioButton();
         Assertions.assertAll(
-                () -> Assertions.assertFalse(webFormPage.isRadioButtonSelected(checkedRadioButton), "Checked option is still selected"),
-                () -> Assertions.assertTrue(webFormPage.isRadioButtonSelected(defaultRadioButton), "Default option is NOT selected")
+                () -> Assertions.assertFalse(webFormPage.isCheckedRadioButtonSelected(), "Checked option is still selected"),
+                () -> Assertions.assertTrue(webFormPage.isDefaultRadioButtonSelected(), "Default option is NOT selected")
         );
     }
 
