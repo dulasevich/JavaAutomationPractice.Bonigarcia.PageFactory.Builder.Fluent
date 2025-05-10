@@ -284,8 +284,9 @@ public class WebFormPage extends BasePage {
 
     @Step("Submit form")
     public SubmitFormPage submitForm() {
+        String webFormUrl = getPageUrl();
         submitButton.click();
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(getPageUrl())));
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(webFormUrl)));
         return new SubmitFormPage(driver);
     }
 }
