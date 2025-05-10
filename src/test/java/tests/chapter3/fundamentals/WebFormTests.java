@@ -178,7 +178,7 @@ public class WebFormTests extends BaseTest {
         Assertions.assertEquals(defaultPickerPosition, webFormPage.getRangePickerLocation(),
                 "Default position of picker is wrong");
 
-        int pixelsToMove = 60;
+        int pixelsToMove = 50;
         webFormPage.moveRangePickerBy(pixelsToMove);
         Assertions.assertEquals(expectedPickerPosition, webFormPage.getRangePickerLocation(), "Picker moved to incorrect position");
     }
