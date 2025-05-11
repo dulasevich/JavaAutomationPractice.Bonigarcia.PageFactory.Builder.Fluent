@@ -4,6 +4,8 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -197,6 +199,9 @@ public class WebFormPage extends BasePage {
 
     @Step("Attach file to the form")
     public void attachFile(String absolutePath) {
+        if (driver instanceof RemoteWebDriver) {
+            ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
+        }
         fileInput.sendKeys(absolutePath);
     }
 
