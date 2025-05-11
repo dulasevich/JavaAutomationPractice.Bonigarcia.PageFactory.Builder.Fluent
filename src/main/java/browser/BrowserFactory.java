@@ -26,6 +26,7 @@ public class BrowserFactory {
         } else {
             driver = setLocalDriver();
         }
+        driver.manage().window().maximize();
         return driver;
     }
 
@@ -40,12 +41,10 @@ public class BrowserFactory {
     }
 
     private static WebDriver setLocalDriver() {
-        WebDriver driver = switch (Browser.fromString(CONFIG_PROPERTIES.getBrowser())) {
+        return switch (Browser.fromString(CONFIG_PROPERTIES.getBrowser())) {
             case CHROME -> new ChromeDriver();
             case FIREFOX -> new FirefoxDriver();
             case EDGE -> new EdgeDriver();
         };
-        driver.manage().window().maximize();
-        return driver;
     }
 }
